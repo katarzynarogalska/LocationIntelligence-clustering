@@ -1,1 +1,1 @@
-# LocationIntelligence-clusterization
+# LocationIntelligence-clustering
