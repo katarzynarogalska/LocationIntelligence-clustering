@@ -4,23 +4,28 @@ from sklearn.preprocessing import Normalizer
 
 #transformer to delete rows with missing latitude and longitude
 class MissingGeographRemover(BaseEstimator,TransformerMixin ): 
-    def __init__(self, columns):
-        self.columns=columns
+    def __init__(self):
+        self.columns=['latitude','longitude']
 
     def fit(self, X, y=None):
         return self
     
     def transform(self, X):
         return X.dropna(subset=self.columns)
+    
 
 #transformer to create new binary columns from Phone and website   
 class ContactKnownAdder(BaseEstimator, TransformerMixin): 
+    def __init__(self):
+        pass
     def fit(self,X,y=None):
         return self
     def transform(self,X):
         X['Website_known'] = X['website'].apply(lambda x: 0 if x.lower()=='uknown' else 1)
         X['Phone_known'] = X['phone_number'].apply(lambda x: 0 if x.lower()=='uknown' else 1)
         return X
+    def set_output(self, *args, **kwargs):
+        return self
 
 #transformer to classify types 
 class ClassifyType(BaseEstimator, TransformerMixin): 
@@ -38,6 +43,8 @@ class ClassifyType(BaseEstimator, TransformerMixin):
             return 'Other'
         X['main_category'] = X['types'].apply(classify)
         return X
+    def set_output(self, *args, **kwargs):
+        return self
     
 #transformer to delete irrelevant columns
 class IrrelevantColumnRemover(BaseEstimator, TransformerMixin):
@@ -48,11 +55,13 @@ class IrrelevantColumnRemover(BaseEstimator, TransformerMixin):
     def transform(self, X):
         X = X.drop(columns = self.irrelevant_columns)
         return X
+    def set_output(self, *args, **kwargs):
+        return self
     
 
 #transformer to Normalize numerical columns
 class NumericalNormalizer(BaseEstimator, TransformerMixin):
-    def __init__(self, numerical_cols):
+    def __init__(self):
         self.numerical_cols= ['review_count','rating']
         self.scaler = Normalizer()
 
@@ -62,3 +71,5 @@ class NumericalNormalizer(BaseEstimator, TransformerMixin):
     def transform(self,X):
         X[self.numerical_cols] = self.scaler.transform(X[self.numerical_cols])
         return X
+    def set_output(self, *args, **kwargs):
+        return self
