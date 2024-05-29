@@ -1,6 +1,6 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 import re
-from sklearn.preprocessing import Normalizer
+from sklearn.preprocessing import StandardScaler
 
 #transformer to delete rows with missing latitude and longitude
 class MissingGeographRemover(BaseEstimator,TransformerMixin ): 
@@ -59,11 +59,11 @@ class IrrelevantColumnRemover(BaseEstimator, TransformerMixin):
         return self
     
 
-#transformer to Normalize numerical columns
-class NumericalNormalizer(BaseEstimator, TransformerMixin):
+#transformer to scale numerical columns
+class NumericalStandardizer(BaseEstimator, TransformerMixin):
     def __init__(self):
         self.numerical_cols= ['review_count','rating']
-        self.scaler = Normalizer()
+        self.scaler = StandardScaler()
 
     def fit(self,X, y=None):
         self.scaler.fit(X[self.numerical_cols])
