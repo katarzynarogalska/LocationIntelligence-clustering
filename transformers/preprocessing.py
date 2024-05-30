@@ -2,7 +2,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import re
 from sklearn.preprocessing import StandardScaler
 
-#transformer to delete rows with missing latitude and longitude
+#transformer to delete rows with missing latitude and longitude, used in preprocessing for first clustering
 class MissingGeographRemover(BaseEstimator,TransformerMixin ): 
     def __init__(self):
         self.columns=['latitude','longitude']
@@ -12,6 +12,7 @@ class MissingGeographRemover(BaseEstimator,TransformerMixin ):
     
     def transform(self, X):
         return X.dropna(subset=self.columns)
+    
     
 
 #transformer to create new binary columns from Phone and website   
