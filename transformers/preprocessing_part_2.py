@@ -51,7 +51,8 @@ class SecondStandardizer(BaseEstimator,TransformerMixin):
 
     def transform(self, X):
         scaled_data = self.scaler.transform(X)
-        return scaled_data
+        df = pd.DataFrame(scaled_data, columns=X.columns)
+        return df
     def set_output(self, *args, **kwargs):
         return self
 
