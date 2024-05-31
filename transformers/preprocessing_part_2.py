@@ -1,7 +1,7 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import LabelEncoder
 
 
 class MoreColumnsRemover(BaseEstimator,TransformerMixin):
@@ -17,15 +17,12 @@ class MoreColumnsRemover(BaseEstimator,TransformerMixin):
     
 class CategoryEncoder(BaseEstimator,TransformerMixin):
     def __init__(self):
-        self.type_column = ['main_category']
-        self.encoder = OneHotEncoder(sparse=False)
+        self.type_column = 'main_category'
+        self.encoder = LabelEncoder()
     def fit(self,X,y=None):
-        self.encoder.fit(X[self.type_column])
         return self
     def transform(self,X):
-        types_encoded = self.encoder.transform(X[self.type_column])
-        df_encoded = pd.DataFrame(types_encoded, columns=self.encoder.get_feature_names_out(self.type_column))
-        X = pd.concat([X, df_encoded], axis=1).drop(columns=self.type_column)
+        X[self.type_column] = self.encoder.fit_transform(X[self.type_column])
         return X
     def set_output(self, *args, **kwargs):
         return self
