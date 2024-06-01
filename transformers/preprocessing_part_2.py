@@ -38,21 +38,23 @@ class BooleanToNumericEncoder(BaseEstimator,TransformerMixin):
     def set_output(self, *args, **kwargs):
         return self
     
-class SecondStandardizer(BaseEstimator,TransformerMixin):
+class SecondStandardizer(BaseEstimator, TransformerMixin):
     def __init__(self):
         self.scaler = StandardScaler()
+        self.continuous_columns = None
 
     def fit(self, X, y=None):
-        self.scaler.fit(X)
+        self.continuous_columns = X.select_dtypes(include=['number']).columns
+        self.scaler.fit(X[self.continuous_columns])
         return self
 
     def transform(self, X):
-        scaled_data = self.scaler.transform(X)
-        df = pd.DataFrame(scaled_data, columns=X.columns)
-        return df
+        scaled_data = self.scaler.transform(X[self.continuous_columns])
+        X[self.continuous_columns] = scaled_data
+        return X
+
     def set_output(self, *args, **kwargs):
         return self
-
     
 
 
