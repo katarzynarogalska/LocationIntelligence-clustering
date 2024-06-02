@@ -52,6 +52,11 @@ class SecondStandardizer(BaseEstimator, TransformerMixin):
         scaled_data = self.scaler.transform(X[self.continuous_columns])
         X[self.continuous_columns] = scaled_data
         return X
+    def inverse_transform(self, X):
+        # Odwróć proces standaryzacji d
+        X_inverse = X.copy()
+        X_inverse[self.continuous_columns] = self.scaler.inverse_transform(X[self.continuous_columns])
+        return X_inverse
 
     def set_output(self, *args, **kwargs):
         return self
